@@ -472,6 +472,8 @@ public class SingleStreamRecordingService extends RecordingService {
 						zipOut.write(bytes, 0, length);
 					}
 					fis.close();
+					zipOut.flush();
+					zipOut.closeEntry();
 
 				}
 				if (!files[i].getName().startsWith(RecordingManager.RECORDING_ENTITY_FILE)) {
@@ -483,6 +485,7 @@ public class SingleStreamRecordingService extends RecordingService {
 			log.error("Error generating ZIP file {}. Error: {}", folder + fileName, e.getMessage());
 		} finally {
 			try {
+				zipOut.finish();
 				zipOut.close();
 				fos.close();
 				this.updateFilePermissions(folder);
